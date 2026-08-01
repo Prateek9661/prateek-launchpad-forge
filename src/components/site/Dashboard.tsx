@@ -97,7 +97,7 @@ export function Dashboard() {
             <p className="mono-label">Contribution activity</p>
             <div className="mt-5 grid grid-cols-[repeat(20,minmax(0,1fr))] gap-1">
               {Array.from({ length: 140 }).map((_, i) => {
-                const level = (i * 37) % 5;
+                const level = Math.floor((Math.sin(i * 12.9898) * 43758.5453) % 1 * 5 + 5) % 5;
                 return (
                   <span
                     key={i}
