@@ -160,3 +160,103 @@
     color: var(--color-foreground);
   }
 }
+
+@theme inline {
+  --color-surface: var(--surface);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    font-family: var(--font-sans);
+    background-image:
+      linear-gradient(to right, oklch(0.6 0.05 255 / 6%) 1px, transparent 1px),
+      linear-gradient(to bottom, oklch(0.6 0.05 255 / 6%) 1px, transparent 1px);
+    background-size: 56px 56px;
+    background-attachment: fixed;
+  }
+  ::selection {
+    background: oklch(0.79 0.145 202 / 30%);
+  }
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    letter-spacing: -0.02em;
+  }
+}
+
+@utility glass {
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-card);
+}
+
+@utility glass-hover {
+  transition:
+    border-color 0.35s ease,
+    box-shadow 0.35s ease,
+    transform 0.35s ease;
+  &:hover {
+    border-color: oklch(0.79 0.145 202 / 45%);
+    box-shadow: var(--shadow-glow);
+    transform: translateY(-3px);
+  }
+}
+
+@utility text-gradient {
+  background: var(--gradient-accent);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility glow-ring {
+  box-shadow: var(--shadow-glow);
+}
+
+@utility hero-aura {
+  background-image: var(--gradient-hero);
+}
+
+@utility mono-label {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--primary);
+}
+
+@keyframes caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes pulse-dot {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 var(--glow-cyan);
+  }
+  70% {
+    box-shadow: 0 0 0 10px transparent;
+  }
+}
+
+@utility caret {
+  animation: caret 1s step-end infinite;
+}
+
+@utility live-dot {
+  animation: pulse-dot 2s infinite;
+}
