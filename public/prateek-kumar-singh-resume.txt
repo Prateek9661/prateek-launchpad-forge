@@ -1,0 +1,37 @@
+PRATEEK KUMAR SINGH
+BCA Student | Aspiring Software Engineer | India
+Email: ukprateek9661@gmail.com
+LinkedIn: https://www.linkedin.com/in/prateek-kumar-singh-6a7400383
+GitHub: https://github.com/Prateek9661
+
+SUMMARY
+BCA student focused on programming fundamentals, software development and
+continuous learning. Building small, complete projects in C and Java while
+preparing for a software engineering role at a product-driven company.
+
+SKILLS
+Programming: C, Java
+Tools & Platforms: GitHub, VS Code, Command Line Basics
+Learning: Artificial Intelligence, MongoDB Ecosystem, AI Agents, Digital Skills,
+          Software Development Fundamentals
+Strengths: Problem Solving, Logical Thinking, Consistent Learning, Curiosity
+
+PROJECTS
+Digital Logic Simulator - C, Logic Design
+  Logic gate simulation, truth table generation, educational visualization.
+Student Record Management System - C, File Handling
+  Add, search, update and delete records with persistent file storage.
+Java Utility Suite - Java, OOP
+  Calculator, converter and number utilities built on a shared class hierarchy.
+
+CERTIFICATIONS
+- AI and Innovation: How MongoDB Enables a Resilient AI Strategy (MongoDB)
+- Building an App with Code Agents and MongoDB (MongoDB)
+- Observability for AI Agents (MongoDB)
+- Applied Digital Skills (Grow with Google)
+- Digital Skills - Skill India Digital Hub (NSDC), completed 18 March 2025
+
+EDUCATION
+Bachelor of Computer Applications (BCA) - in progress, India
+
+(Placeholder resume - replace with a PDF export when ready.)
