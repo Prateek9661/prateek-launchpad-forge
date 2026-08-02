@@ -36,7 +36,6 @@ export const Route = createFileRoute("/")({
           "@type": "Person",
           name: "Prateek Kumar Singh",
           jobTitle: "BCA Student | Aspiring Software Engineer",
-          email: "mailto:ukprateek9661@gmail.com",
           address: { "@type": "PostalAddress", addressCountry: "India" },
           sameAs: [
             "https://github.com/Prateek9661",
