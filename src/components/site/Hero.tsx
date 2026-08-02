@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import { ArrowDown, Download, Github, Linkedin, Mail, MapPin } from "lucide-react";
+import { EngineerEmblem } from "./EngineerEmblem";
 
 const HEADLINE = "Building software foundations for tomorrow's technology.";
 
@@ -36,12 +37,10 @@ export function Hero() {
         >
           <div className="glass glow-ring relative mx-auto max-w-sm overflow-hidden p-3">
             <div className="relative aspect-4/5 overflow-hidden rounded-lg border border-border/70 bg-linear-to-br from-secondary/25 via-background to-primary/15">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <span className="font-display text-7xl font-semibold text-gradient">PKS</span>
-              </div>
+              <EngineerEmblem />
               <div className="absolute inset-x-0 bottom-0 border-t border-border/60 bg-background/70 px-4 py-3 backdrop-blur-md">
                 <p className="font-mono text-[11px] text-muted-foreground">
-                  portrait.jpg — awaiting upload
+                  <span className="text-primary">$</span> render --engineer --mode=3d
                 </p>
               </div>
             </div>
