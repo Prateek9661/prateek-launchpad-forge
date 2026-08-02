@@ -19,7 +19,7 @@ function useTypedLoop() {
   const [i, setI] = useState(0);
   const [n, setN] = useState(0);
   useEffect(() => {
-    const line = LINES[i % LINES.length];
+    const line = LINES[i % LINES.length] ?? "";
     if (n < line.length) {
       const t = setTimeout(() => setN((v) => v + 1), 45);
       return () => clearTimeout(t);
@@ -30,7 +30,7 @@ function useTypedLoop() {
     }, 1300);
     return () => clearTimeout(t);
   }, [i, n]);
-  return LINES[i % LINES.length].slice(0, n);
+  return (LINES[i % LINES.length] ?? "").slice(0, n);
 }
 
 export function EngineerEmblem() {
