@@ -1,97 +1,162 @@
-import { useRef, useState } from "react";
-import { motion } from "motion/react";
-import { Braces, Cpu, GitBranch, Terminal } from "lucide-react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "motion/react";
+import { CheckCircle2, GitCommit, Zap } from "lucide-react";
 
-const FACES = [
-  { label: "PKS", tz: 78, ry: 0 },
-  { label: "</>", tz: 78, ry: 90 },
-  { label: "{ }", tz: 78, ry: 180 },
-  { label: "01", tz: 78, ry: 270 },
+const LINES = [
+  "$ git commit -m 'ship it'",
+  "> compiling modules…",
+  "> tests: 24 passed",
+  "> deploy: success ✔",
 ];
 
-const CHIPS = [
-  { icon: Terminal, label: "C", cls: "left-3 top-8" },
-  { icon: Braces, label: "Java", cls: "right-3 top-16" },
-  { icon: GitBranch, label: "Git", cls: "left-5 bottom-24" },
-  { icon: Cpu, label: "AI", cls: "right-5 bottom-16" },
+const LAYERS = [
+  { z: 0, label: "ui", w: "88%", tint: "from-primary/20" },
+  { z: 42, label: "logic", w: "78%", tint: "from-secondary/20" },
+  { z: 84, label: "data", w: "68%", tint: "from-primary/12" },
 ];
+
+function useTypedLoop() {
+  const [i, setI] = useState(0);
+  const [n, setN] = useState(0);
+  useEffect(() => {
+    const line = LINES[i % LINES.length];
+    if (n < line.length) {
+      const t = setTimeout(() => setN((v) => v + 1), 45);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => {
+      setN(0);
+      setI((v) => v + 1);
+    }, 1300);
+    return () => clearTimeout(t);
+  }, [i, n]);
+  return LINES[i % LINES.length].slice(0, n);
+}
 
 export function EngineerEmblem() {
-  const ref = useRef<HTMLDivElement>(null);
-  const [tilt, setTilt] = useState({ x: 0, y: 0 });
+  const wrap = useRef<HTMLDivElement>(null);
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rx = useSpring(useTransform(my, [-0.5, 0.5], [12, -12]), { stiffness: 120, damping: 16 });
+  const ry = useSpring(useTransform(mx, [-0.5, 0.5], [-18, 18]), { stiffness: 120, damping: 16 });
+  const typed = useTypedLoop();
+
+  const rain = useMemo(
+    () =>
+      Array.from({ length: 14 }, (_, i) => ({
+        left: `${(i * 7.4 + 3) % 97}%`,
+        delay: (i % 7) * 0.6,
+        dur: 4 + (i % 5),
+        text: Array.from({ length: 12 }, () => (Math.random() > 0.5 ? "1" : "0")).join(" "),
+      })),
+    [],
+  );
 
   return (
     <div
-      ref={ref}
+      ref={wrap}
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect();
-        setTilt({
-          y: ((e.clientX - r.left) / r.width - 0.5) * 26,
-          x: -((e.clientY - r.top) / r.height - 0.5) * 20,
-        });
+        mx.set((e.clientX - r.left) / r.width - 0.5);
+        my.set((e.clientY - r.top) / r.height - 0.5);
       }}
-      onMouseLeave={() => setTilt({ x: 0, y: 0 })}
-      className="scene-3d absolute inset-0 flex items-center justify-center overflow-hidden"
+      onMouseLeave={() => {
+        mx.set(0);
+        my.set(0);
+      }}
+      className="scene-3d absolute inset-0 overflow-hidden"
       aria-hidden
     >
-      {/* glow pool */}
-      <div className="absolute h-56 w-56 rounded-full bg-primary/20 blur-3xl" />
-
-      {/* scan line */}
-      <div className="scan-line pointer-events-none absolute inset-x-0 top-0 h-16 bg-linear-to-b from-transparent via-primary/12 to-transparent" />
-
-      {/* orbit rings */}
-      <div className="orbit-ring absolute h-64 w-64 rounded-full border border-primary/25 [transform:rotateX(72deg)]">
-        <span className="absolute -top-1 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full bg-primary shadow-[0_0_12px_currentColor]" />
+      {/* binary rain */}
+      <div className="absolute inset-0 opacity-[0.16]">
+        {rain.map((r, i) => (
+          <motion.span
+            key={i}
+            initial={{ y: "-40%" }}
+            animate={{ y: "130%" }}
+            transition={{ duration: r.dur, delay: r.delay, repeat: Infinity, ease: "linear" }}
+            className="absolute top-0 font-mono text-[9px] leading-3 text-primary"
+            style={{ left: r.left, writingMode: "vertical-rl" }}
+          >
+            {r.text}
+          </motion.span>
+        ))}
       </div>
-      <div className="orbit-ring-slow absolute h-80 w-80 rounded-full border border-secondary/20 [transform:rotateX(76deg)_rotateZ(18deg)]">
-        <span className="absolute -bottom-1 left-1/2 h-1.5 w-1.5 -translate-x-1/2 rounded-full bg-secondary shadow-[0_0_10px_currentColor]" />
-      </div>
 
-      {/* rotating cube */}
+      <div className="absolute left-1/2 top-1/2 h-48 w-48 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-3xl" />
+
+      {/* tilting 3D stack */}
       <motion.div
-        animate={{ rotateX: tilt.x, rotateY: tilt.y }}
-        transition={{ type: "spring", stiffness: 120, damping: 14 }}
-        className="float-soft relative"
-        style={{ transformStyle: "preserve-3d" }}
+        style={{ rotateX: rx, rotateY: ry, transformStyle: "preserve-3d" }}
+        className="absolute inset-0 flex items-center justify-center"
       >
-        <div className="cube-3d relative h-[156px] w-[156px]">
-          {FACES.map((f) => (
-            <div
-              key={f.label}
-              className="cube-face rounded-xl"
-              style={{ transform: `rotateY(${f.ry}deg) translateZ(${f.tz}px)` }}
+        <div
+          className="relative h-[190px] w-[230px]"
+          style={{ transformStyle: "preserve-3d", transform: "rotateX(56deg) rotateZ(-42deg)" }}
+        >
+          {LAYERS.map((l, i) => (
+            <motion.div
+              key={l.label}
+              initial={{ opacity: 0, z: l.z - 40 }}
+              animate={{ opacity: 1, z: [l.z, l.z + 12, l.z] }}
+              transition={{
+                opacity: { duration: 0.6, delay: i * 0.15 },
+                z: { duration: 5 + i, repeat: Infinity, ease: "easeInOut", delay: i * 0.4 },
+              }}
+              className={`absolute left-1/2 top-1/2 aspect-square w-[86%] -translate-x-1/2 -translate-y-1/2 rounded-2xl border border-primary/35 bg-linear-to-br ${l.tint} to-transparent backdrop-blur-[2px]`}
+              style={{ transformStyle: "preserve-3d", boxShadow: "0 0 40px -12px var(--glow-cyan)" }}
             >
-              <span className="font-display text-4xl font-semibold text-gradient">{f.label}</span>
-            </div>
+              {/* grid on layer */}
+              <div className="absolute inset-0 rounded-2xl opacity-40 [background-image:linear-gradient(var(--border)_1px,transparent_1px),linear-gradient(90deg,var(--border)_1px,transparent_1px)] [background-size:22px_22px]" />
+              <span className="absolute -top-4 left-2 font-mono text-[9px] tracking-widest text-primary/80">
+                {l.label}
+              </span>
+              {/* travelling packet */}
+              <motion.span
+                animate={{ x: ["6%", "82%"], y: ["78%", "12%"] }}
+                transition={{ duration: 3 + i, repeat: Infinity, ease: "easeInOut", repeatType: "reverse" }}
+                className="absolute h-1.5 w-1.5 rounded-full bg-primary shadow-[0_0_10px_currentColor]"
+              />
+            </motion.div>
           ))}
-          <div
-            className="cube-face rounded-xl"
-            style={{ transform: `rotateX(90deg) translateZ(78px)` }}
-          />
-          <div
-            className="cube-face rounded-xl"
-            style={{ transform: `rotateX(-90deg) translateZ(78px)` }}
-          />
         </div>
       </motion.div>
 
-      {/* floating tech chips */}
-      {CHIPS.map((c, i) => (
-        <motion.div
-          key={c.label}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: [0, -8, 0] }}
-          transition={{
-            opacity: { delay: 0.3 + i * 0.12, duration: 0.5 },
-            y: { duration: 4 + i, repeat: Infinity, ease: "easeInOut" },
-          }}
-          className={`absolute ${c.cls} flex items-center gap-1.5 rounded-full border border-border/70 bg-background/70 px-2.5 py-1 font-mono text-[10px] text-muted-foreground backdrop-blur-md`}
-        >
-          <c.icon className="h-3 w-3 text-primary" />
-          {c.label}
-        </motion.div>
-      ))}
+      {/* live terminal strip */}
+      <div className="absolute inset-x-3 bottom-16 rounded-lg border border-border/70 bg-background/80 px-3 py-2 backdrop-blur-md">
+        <p className="truncate font-mono text-[10px] text-primary">
+          {typed}
+          <span className="caret">▌</span>
+        </p>
+      </div>
+
+      {/* status chips */}
+      <motion.div
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute left-3 top-4 flex items-center gap-1.5 rounded-full border border-border/70 bg-background/70 px-2.5 py-1 font-mono text-[10px] text-muted-foreground backdrop-blur-md"
+      >
+        <CheckCircle2 className="h-3 w-3 text-primary" /> build passing
+      </motion.div>
+      <motion.div
+        animate={{ y: [0, 7, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute right-3 top-14 flex items-center gap-1.5 rounded-full border border-border/70 bg-background/70 px-2.5 py-1 font-mono text-[10px] text-muted-foreground backdrop-blur-md"
+      >
+        <GitCommit className="h-3 w-3 text-secondary" /> main
+      </motion.div>
+      <motion.div
+        animate={{ y: [0, -5, 0] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: "easeInOut" }}
+        className="absolute bottom-32 right-4 flex items-center gap-1.5 rounded-full border border-border/70 bg-background/70 px-2.5 py-1 font-mono text-[10px] text-muted-foreground backdrop-blur-md"
+      >
+        <Zap className="h-3 w-3 text-primary" /> 60 fps
+      </motion.div>
+
+      {/* signature monogram */}
+      <span className="absolute bottom-3 left-4 font-display text-sm font-semibold tracking-[0.4em] text-gradient">
+        PKS
+      </span>
     </div>
   );
 }
