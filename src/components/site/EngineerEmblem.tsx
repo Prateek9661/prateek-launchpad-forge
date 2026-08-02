@@ -47,7 +47,7 @@ export function EngineerEmblem() {
         left: `${(i * 7.4 + 3) % 97}%`,
         delay: (i % 7) * 0.6,
         dur: 4 + (i % 5),
-        text: Array.from({ length: 12 }, () => (Math.random() > 0.5 ? "1" : "0")).join(" "),
+        text: Array.from({ length: 12 }, (_, j) => ((i * 5 + j * 3) % 7 > 3 ? "1" : "0")).join(" "),
       })),
     [],
   );
