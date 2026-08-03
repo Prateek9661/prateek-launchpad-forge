@@ -101,15 +101,9 @@ export function Hero() {
 
           <div className="mt-8 flex flex-wrap gap-3">
             <a
-              href="#projects"
-              className="inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
-            >
-              View Projects
-            </a>
-            <a
               href="/prateek-kumar-singh-resume.txt"
               download
-              className="inline-flex items-center gap-2 rounded-lg border border-primary/40 px-5 py-3 text-sm font-semibold text-primary transition-shadow hover:glow-ring"
+              className="inline-flex items-center gap-2 rounded-lg bg-linear-to-r from-primary to-secondary px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
             >
               <Download className="h-4 w-4" aria-hidden />
               Download Resume
