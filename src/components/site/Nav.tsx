@@ -4,7 +4,6 @@ import { Menu, X, Terminal } from "lucide-react";
 const LINKS = [
   { id: "about", label: "About" },
   { id: "skills", label: "Skills" },
-  { id: "projects", label: "Projects" },
   { id: "journey", label: "Journey" },
   { id: "certifications", label: "Certifications" },
   { id: "contact", label: "Contact" },
