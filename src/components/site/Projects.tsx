@@ -1,5 +1,5 @@
 import { Section, Reveal } from "./primitives";
-import { ExternalLink, Github } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 const PROJECTS = [
   {
@@ -122,15 +122,6 @@ export function Projects() {
               </div>
 
               <div className="mt-7 flex flex-wrap gap-3">
-                <a
-                  href="https://github.com/Prateek9661"
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-flex items-center gap-2 rounded-lg border border-primary/40 px-4 py-2 text-sm font-medium text-primary transition-shadow hover:glow-ring"
-                >
-                  <Github className="h-4 w-4" aria-hidden />
-                  GitHub
-                </a>
                 <span
                   aria-disabled="true"
                   className="inline-flex cursor-not-allowed items-center gap-2 rounded-lg border border-border px-4 py-2 text-sm font-medium text-muted-foreground"
